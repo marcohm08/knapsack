@@ -19,6 +19,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pip import main
 from importlib.resources import path
+import pandas as pd
 
 def evaluateSol(sol, benefits, weights):
     
@@ -115,42 +116,36 @@ def grasp(benefits, weights, capacity, maxIterations = 10000, coef = 0.7):
 
     return solution, maxBenefit, iterations
 
-def getDataInstance(testName):
+# if __name__ == "__main__":
 
-    testName = repr(testName).replace("'", "")
-    benefits = []
-    weights = []
+#     instances = [r'./pruebas/inst_10.txt', r'./pruebas/inst_20.txt', r'./pruebas/inst_100.txt', r'./pruebas/inst_200.txt', r'./pruebas/inst_500.txt']
+#     """
+#     solucion de 11 ejecucion
+#     los tiempos de cada ejecucion
+#     11 errores de ejecución
+#     lista de soluciones en cada iteracion las 11 ejecuciones en una unica lista
+#     """
 
-    with open(testName) as file:
-
-        firstLine = True
+#     for instance in instances:
         
-        for line in file.readlines():
+#         timesInstance = [0] * 11
+#         errorsInstance = [0] * 11
+#         benefitsInstance = [0] * 11
+
+#         capacity, opt, benefits, weights = getDataInstance(instance)
+
+#         print(len(weights))
+
+#         for i in range(11):
+#             print(len(weights), i + 1)
+#             start = time.time()
+#             solution, benefit, iterations = grasp(benefits, weights, capacity)
             
-            data = line.split(" ")
-            
-            if firstLine:
-                firstLine = False
-                n = int(data[0])
-                capacity = int(data[1])
-                opt = int(data[2])            
-            elif n > 0:
-                n -= 1
-                benefits = benefits + [int(data[0])]
-                weights = weights + [int(data[1])]
-
-    return capacity, opt, benefits, weights
-
-if __name__ == "__main__":
-
-    instances = ['../pruebas/inst_10.txt', '../pruebas/inst_20.txt', '../pruebas/inst_100.txt', '../pruebas/inst_200.txt', '../pruebas/inst_500.txt']
-    """
-    solucion de 11 ejecucion
-    los tiempos de cada ejecucion
-    11 errores de ejecución
-    lista de soluciones en cada iteracion las 11 ejecuciones en una unica lista
-    """
-
-    for instance in instances:
-        capacity, opt, benefits, weights = getDataInstance(instance)
-        solution, benefit, iterations = grasp(benefits, weights, capacity)
+#             timesInstance[i] = time.time() - start
+#             benefitsInstance[i] = benefit
+#             errorsInstance[i] = abs(benefit - opt) / opt
+        
+#         graficarTres(benefitsInstance, timesInstance, errorsInstance)
+#         plt.savefig(str(len(weights))+"_GRASP")
+#         plt.show()
+#         plt.close()
