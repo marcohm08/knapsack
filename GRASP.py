@@ -143,7 +143,7 @@ def getDataInstance(testName):
 
 if __name__ == "__main__":
 
-    instances = ['../pruebas/inst_10.txt', '../pruebas/inst_20.txt', '../pruebas/inst_100.txt', '../pruebas/inst_200.txt']
+    instances = ['../pruebas/inst_10.txt', '../pruebas/inst_20.txt', '../pruebas/inst_100.txt', '../pruebas/inst_200.txt', '../pruebas/inst_500.txt']
     """
     solucion de 11 ejecucion
     los tiempos de cada ejecucion
