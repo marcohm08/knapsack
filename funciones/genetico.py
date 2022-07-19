@@ -1,5 +1,3 @@
-#-*- coding: cp1252 -*-
-from cProfile import label
 import time
 import numpy
 import matplotlib.pyplot as plt
@@ -10,7 +8,7 @@ import sys
 # Funci�n que lee el archivo con los datos
 def leeArchivo(nombre):
     archivo = open(nombre,'r')
-    matriz = [] 
+    matriz = []
     fila = []
     for linea in archivo:
         fila = linea.split()
@@ -91,13 +89,11 @@ def cruzamiento(conjunto):
         parte2 = sol[punto:]
         mitades.append(parte1)
         mitades.append(parte2)
-        listaMitades.append(mitades)
-    
+        listaMitades.append(mitades)   
     sol1 = listaMitades[0][0] + listaMitades[1][1]
     sol2 = listaMitades[0][1] + listaMitades[1][0]
     nuevasSoluciones.append(sol1)
-    nuevasSoluciones.append(sol2)
-    
+    nuevasSoluciones.append(sol2)    
     return nuevasSoluciones
 
 def mutacion(sol,probabilidad):
@@ -180,23 +176,16 @@ def busquedaLocal(solucion, matriz):
 
 def algoritmo_genetico(matriz):
     soluciones = generaSolucionesIniciales(4,matriz)
-    valores  = evaluacionSoluciones(soluciones,matriz)
-    
-    mejorSolucion,mayorBeneficio = obtenerMejorValor(soluciones,valores)
-    
+    valores  = evaluacionSoluciones(soluciones,matriz)  
+    mejorSolucion,mayorBeneficio = obtenerMejorValor(soluciones,valores)  
     listaMejores = [mejorSolucion]
     listaBeneficios = [mayorBeneficio]
-    
     ciclosSinMejora = 0
-    
     ciclos = 0
-    
     while ciclosSinMejora < 1000 and ciclos < (2500 - matriz[0][0]):
         soluciones = nuevaPoblacion(soluciones,valores,matriz)
-        valores  = evaluacionSoluciones(soluciones,matriz)
-                
-        mejorSolucionCiclo,mayorBeneficioCiclo = obtenerMejorValor(soluciones,valores)
-        
+        valores  = evaluacionSoluciones(soluciones,matriz)               
+        mejorSolucionCiclo,mayorBeneficioCiclo = obtenerMejorValor(soluciones,valores)       
         #print(f'Ciclo {ciclos}, mejor valor: {mayorBeneficio}, solucion ciclo: {mayorBeneficioCiclo}')
         if mayorBeneficioCiclo <= mayorBeneficio:
             ciclosSinMejora = ciclosSinMejora + 1
@@ -206,12 +195,10 @@ def algoritmo_genetico(matriz):
             ciclosSinMejora = 0
         listaMejores.append(mejorSolucion)
         listaBeneficios.append(mayorBeneficio)
-        ciclos = ciclos + 1
-        
+        ciclos = ciclos + 1       
     mejorSolucion,mayorBeneficio = busquedaLocal(mejorSolucion,matriz)
     listaMejores.append(mejorSolucion)
-    listaBeneficios.append(mayorBeneficio)
-    
+    listaBeneficios.append(mayorBeneficio)   
     return listaBeneficios,listaMejores,mayorBeneficio,mejorSolucion
 
 def ejecucionAlgoritmo(veces,matriz):
@@ -223,14 +210,12 @@ def ejecucionAlgoritmo(veces,matriz):
     for i in range(veces):
         t0 = time.time()
         listaBeneficios,listaMejores,mayorBeneficio,mejorSolucion = algoritmo_genetico(matriz)
-        t1 = time.time() - t0
-        
+        t1 = time.time() - t0      
         beneficios.append(mayorBeneficio)
         tiempos.append(t1)
         listaSoluciones.append(mejorSolucion)
         todasSoluciones = todasSoluciones + listaMejores
         todosBeneficios = todosBeneficios + listaBeneficios
-    
     return beneficios,tiempos,listaSoluciones,todasSoluciones,todosBeneficios
 
 def errorPorcentual(lista, optimo):
@@ -239,88 +224,5 @@ def errorPorcentual(lista, optimo):
         error = abs(resultado - optimo)/optimo
         listaErrores.append(error)
     return listaErrores
-    
-def graficar(numero,listaMejores, mejorObjetivo):
-    plt.figure(numero)
-    graficoMejores = plt.plot(listaMejores)
-    plt.setp(graficoMejores,"linestyle","-","marker","s","color","b","markersize","2")
-    plt.title(u"Algoritmo genetico Knapsack 0-1") 
-    plt.ylabel(u"Valor objetivo")
-   
-    plt.xlabel(u"Valor óptimo : " + str(mejorObjetivo))
-    return True
-
-def graficarLista(numero,lista, titulo, medida):
-    plt.figure(numero)
-    x = range(1,len(lista) + 1)
-    graficoMejores = plt.plot(x,lista)
-    plt.setp(graficoMejores,"linestyle","-","marker","o","color","r","markersize","3")
-    plt.xticks(x)
-    plt.title(f"{titulo}")
-    plt.ylabel(f"{medida}")
-    i = 1
-    for valor in lista:
-        plt.annotate(str(round(valor,2)), xy=(i, valor))
-        i = i + 1
-    plt.xlabel('Número de ejecución')
-    return True 
-
-def graficarTres(beneficios, tiempos, errores):
-    plt.figure(5)
-    plt.subplot(3, 1, 1)
-    x = range(1,len(beneficios) + 1)
-    plt.title(f'Mejores beneficios por ejecución')
-    graficoMejores = plt.plot(x,beneficios)
-    plt.xticks(x)
-    plt.setp(graficoMejores,"linestyle","-","marker","o","color","b","markersize","3")
-    plt.ylabel(f'Valor Objetivo')
-    i = 1
-    for valor in beneficios:
-        plt.annotate(str(round(valor,2)), xy=(i, valor))
-        i = i + 1
-    plt.subplot(3, 1, 2)
-    graficoTiempos = plt.plot(x,tiempos)
-    plt.setp(graficoTiempos,"linestyle","-","marker","s","color","r","markersize","3")
-    plt.xticks(x)
-    plt.ylabel(u"Tiempo (s)")
-    i = 1
-    for valor in tiempos:
-        plt.annotate(str(round(valor,2)), xy=(i, valor))
-        i = i + 1
-    plt.subplot(3, 1, 3)
-    graficoErrores = plt.plot(x,errores)
-    plt.setp(graficoErrores,"linestyle","-","marker","s","color","g","markersize","3")
-    plt.xticks(x)
-    plt.ylabel(u"Error (%)")
-    i = 1
-    for valor in errores:
-        plt.annotate(str(round(valor,2)), xy=(i, valor))
-        i = i + 1
-    plt.xlabel(u"Número de ejecución")
-    return True
-
-# Algoritmo generico:
-# Se genera una poblacion inicial
-# Se evaluan las soluciones
-# Se seleccionan las 2 mejores
-# se cruzan
-# se mutan
-# Se evaluan de nuevo
-# repetir por un número de iteraciones 
-
-if __name__ == '__main__':
-    matriz = numpy.array(leeArchivo(sys.argv[1]))
-    optimo = matriz[0][2]
-    
-    beneficios,tiempos,listaSoluciones,todasSoluciones,todosBeneficios = ejecucionAlgoritmo(11,matriz)
-    listeErrores = errorPorcentual(beneficios,optimo)
-    
-    graficar(1,todosBeneficios,max(todosBeneficios))# en este se coloca la lista para la convergencia
-    graficarTres(beneficios, tiempos, listeErrores)
-    plt.show()
-    
-    series = pd.Series(beneficios)
-    
-    print(series.describe())
     
     
