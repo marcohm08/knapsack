@@ -142,7 +142,7 @@ def nuevaPoblacion(soluciones, valores, matriz):
     hijosMutados = []
     i = 0
     while len(hijosMutados) < 2:
-        mutado = mutacion(hijos[i],0.55)
+        mutado = mutacion(hijos[i],0.8)
         if solucionValida(mutado,matriz):
             hijosMutados.append(mutado)
             i = i + 1
@@ -154,15 +154,27 @@ def nuevaPoblacion(soluciones, valores, matriz):
     return nuevoConjunto
 
 def busquedaLocal(solucion, matriz):
-    i = 0
-    for elemento in solucion:
-        if elemento == 0:
-            solucion[i] = 1
-            if not solucionValida(solucion,matriz):
-                solucion[i] = 0
-        i = i + 1
-        beneficio = funcionObjetivo(matriz,solucion)
-    return solucion,beneficio
+    agrega = True
+    adicion = 0
+    indiceObjeto = 0
+    solAux = solucion.copy()
+    while agrega:
+        indices_0 = [index for index, element in enumerate(solAux) if element == 0]
+        for indice in indices_0:
+            solAux[indice] = 1
+            if solucionValida(solAux,matriz):
+                if(matriz[1 + indice][0] > adicion):
+                    indiceObjeto = indice
+                    adicion = matriz[1 + indice][0]
+            solAux[indice] = 0    
+        if adicion == 0:
+            agrega = False
+        else: 
+            solAux[indiceObjeto] = 1
+            adicion = 0
+            indiceObjeto = 0  
+        beneficio = funcionObjetivo(matriz,solAux)
+    return solAux,beneficio
 
 
 
@@ -298,15 +310,12 @@ def graficarTres(beneficios, tiempos, errores):
 
 if __name__ == '__main__':
     matriz = numpy.array(leeArchivo(sys.argv[1]))
-    optimo = int(sys.argv[2])
+    optimo = matriz[0][2]
     
     beneficios,tiempos,listaSoluciones,todasSoluciones,todosBeneficios = ejecucionAlgoritmo(11,matriz)
     listeErrores = errorPorcentual(beneficios,optimo)
     
     graficar(1,todosBeneficios,max(todosBeneficios))# en este se coloca la lista para la convergencia
-    #graficarLista(2,beneficios,'Mejores beneficios por ejecución','Valor Objetivo')
-    #graficarLista(3,tiempos,'Tiempos por ejecución','Tiempo (s)')
-    #graficarLista(4,listeErrores,'Error porcentual por ejecución','Error (%)')
     graficarTres(beneficios, tiempos, listeErrores)
     plt.show()
     
