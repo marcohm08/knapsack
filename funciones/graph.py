@@ -5,7 +5,7 @@ def graficar(listaMejores, mejorObjetivo, algoritmo, cantidad):
     graficoMejores = plt.plot(listaMejores)
     plt.setp(graficoMejores,"linestyle","-","marker","s","color","b","markersize","2")
     plt.title(u"Curva de convergencia Knapsack 0-1 "+algoritmo+' '+cantidad+' elementos') 
-    plt.ylabel(u"Valor objetivo") 
+    plt.ylabel(u"Valor obtenido") 
     plt.xlabel(('Mejor beneficio encontrado : ' + str(mejorObjetivo)))
     return True
 

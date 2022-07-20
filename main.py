@@ -42,20 +42,29 @@ if __name__ == "__main__":
             timesInstance = [0] * 11
             errorsInstance = [0] * 11
             benefitsInstance = [0] * 11
+            allBenefits = []
 
             capacity, opt, benefits, weights = getDataInstance(instance)
 
-            print(len(weights))
-
             for i in range(11):
-                print(len(weights), i + 1)
+
                 start = time.time()
-                solution, benefit, iterations = grasp(benefits, weights, capacity)
+                solution, benefit, iterations, benefitsIterations = grasp(benefits, weights, capacity)
                 timesInstance[i] = time.time() - start
+                
                 benefitsInstance[i] = benefit
                 errorsInstance[i] = abs(benefit - opt) / opt
-            graficarTres(benefitsInstance, timesInstance, errorsInstance,'GRASP',weights)
+                allBenefits = allBenefits + benefitsIterations
+
+            graficar(allBenefits, max(allBenefits), 'GRASP', str(len(weights)))
+            plt.savefig('./graficos/grasp/convergencia'+str(len(weights))+"_GRASP")
+            graficarTres(benefitsInstance, timesInstance, errorsInstance,'GRASP', str(len(weights)))
             plt.savefig('./graficos/grasp/'+str(len(weights))+"_GRASP")
+
+            series = pd.Series(benefitsInstance)
+            print('Estadísticas de '+str(len(weights)))
+            print(series.describe())
+            
         plt.show()
         
     elif opcion  == '2':

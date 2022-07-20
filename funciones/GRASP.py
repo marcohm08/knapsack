@@ -99,22 +99,28 @@ def localSearch(initialSol, benefits, weights, capacity):
 
     return solution, maxBenefit
 
-def grasp(benefits, weights, capacity, maxIterations = 10000, coef = 0.7):
+def grasp(benefits, weights, capacity, maxIterations = 10000, coef = 0.6):
 
     maxBenefit = -1
     iterations = 0
+    benefitsIterations =  []
+    noImprovement = len(weights) * coef
 
-    while maxIterations != iterations:
+    while maxIterations != iterations and noImprovement > 0:
 
         iterations += 1
         auxSol = greedyRandomized(benefits, weights, capacity, coef)
         auxSol, auxBenefit = localSearch(auxSol, benefits, weights, capacity)
 
         if auxBenefit > maxBenefit:
+            noImprovement = len(weights) * coef
             solution = auxSol[:]
             maxBenefit = auxBenefit
+        else:
+            noImprovement -= 1
 
-    return solution, maxBenefit, iterations
+        benefitsIterations.append(maxBenefit)
+    return solution, maxBenefit, iterations, benefitsIterations
 
 # if __name__ == "__main__":
 
