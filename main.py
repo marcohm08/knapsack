@@ -89,7 +89,7 @@ if __name__ == "__main__":
             print(series.describe())
             
             i = i + 1
-        plt.show()
+       # plt.show()
 
     else:
         print('Instrucciones de uso:')

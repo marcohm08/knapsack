@@ -22,18 +22,15 @@ def leeArchivo(nombre):
 # Funci�n que construye una soluci�n inicial aleatoria 
 def solucionInicialAleatoria(elementos,matriz):
     #solucionInicial =  [random.randint(0,1) for b in range(1,elementos+1)]
-    solucion = []
+    solucion = [0]*elementos
     peso = 0
-    for i in range(elementos):
-        valor = random.randint(0,1)
-        if valor == 1:
-            if peso + matriz[i][1] <=  matriz[0][1]:
-                solucion.append(valor)
-                peso = peso + matriz[i][1]
-            else:
-                solucion.append(0)
-        else:
-            solucion.append(valor)
+    porRevisar = [index for index, element in enumerate(solucion) if element == 0]
+    while len(porRevisar) != 0:
+        posicion = random.choice(porRevisar)
+        if peso + matriz[posicion][1] <=  matriz[0][1]:
+            solucion[posicion] = 1
+            peso = peso + matriz[posicion + 1][1]
+        porRevisar.remove(posicion)
     return solucion
 
 def calcularPesoMochila(solucion,matriz):
@@ -98,15 +95,15 @@ def cruzamiento(conjunto):
 
 def mutacion(sol,probabilidad):
     nuevaSol = []
-    for i in range(0,len(sol)):
+    items = len(sol)
+    for i in range(0,items):
         numeroAleatorio = random.random()
-
         if numeroAleatorio > probabilidad:
             if sol[i] == 1:
                 valor = 0
             else:
                 valor = 1
-        else: 
+        else:
             valor = sol[i]
 
         nuevaSol.append(valor)
@@ -138,7 +135,7 @@ def nuevaPoblacion(soluciones, valores, matriz):
     hijosMutados = []
     i = 0
     while len(hijosMutados) < 2:
-        mutado = mutacion(hijos[i],0.8)
+        mutado = mutacion(hijos[i],0.7)
         if solucionValida(mutado,matriz):
             hijosMutados.append(mutado)
             i = i + 1
@@ -162,13 +159,13 @@ def busquedaLocal(solucion, matriz):
                 if(matriz[1 + indice][0] > adicion):
                     indiceObjeto = indice
                     adicion = matriz[1 + indice][0]
-            solAux[indice] = 0    
+            solAux[indice] = 0
         if adicion == 0:
             agrega = False
         else: 
             solAux[indiceObjeto] = 1
             adicion = 0
-            indiceObjeto = 0  
+            indiceObjeto = 0
         beneficio = funcionObjetivo(matriz,solAux)
     return solAux,beneficio
 
