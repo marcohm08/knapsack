@@ -19,6 +19,7 @@ if __name__ == "__main__":
         print("python main.py <heurística a utilizar>")
         print("1: GRASP")
         print("2: Algoritmo genético")
+        print("3: GRASP y Algoritmo genético")
         sys.exit(1)
         
     instances = [r'./pruebas/inst_10.txt',
@@ -27,15 +28,9 @@ if __name__ == "__main__":
                     r'./pruebas/inst_200.txt',
                     r'./pruebas/inst_500.txt']
     
-    if opcion == '1':
-
+    if opcion == '1' or opcion == '3':
         
-        """
-        solucion de 11 ejecucion
-        los tiempos de cada ejecucion
-        11 errores de ejecución
-        lista de soluciones en cada iteracion las 11 ejecuciones en una unica lista
-        """
+        print("Ejecutando GRASP")
 
         for instance in instances:
             
@@ -65,9 +60,12 @@ if __name__ == "__main__":
             print('Estadísticas de '+str(len(weights)))
             print(series.describe())
             
-        plt.show()
+        print("Ejecución GRASP terminada")
+        print("gráficos guardados en ../graficos/grasp")
         
-    elif opcion  == '2':
+    if opcion  == '2' or opcion == '3':
+
+        print("\nEjecutando Algoritmo genético")
         
         cantidad_elementos = ['10','20','100','200','500']
         i = 0
@@ -89,11 +87,14 @@ if __name__ == "__main__":
             print(series.describe())
             
             i = i + 1
-       # plt.show()
+        
+        print("Ejecución Algoritmo genético terminada")
+        print("gráficos guardados en ../graficos/genetico")
 
-    else:
+    if opcion != '1' and opcion != '2' and opcion != '3':
         print('Instrucciones de uso:')
         print("python main.py <heurística a utilizar>")
         print("1: GRASP")
         print("2: Algoritmo genético")
+        print("3: GRASP y Algoritmo genético")
     
